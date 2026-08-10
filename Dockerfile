@@ -20,5 +20,11 @@ COPY --from=builder /app/target/*.jar app.jar
 # Expose port
 EXPOSE 8080
 
-# Run Spring Boot application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run Spring Boot application with memory limits tuned for small containers
+ENTRYPOINT ["java", \
+    "-XX:MaxRAMPercentage=75.0", \
+    "-XX:InitialRAMPercentage=50.0", \
+    "-XX:+UseSerialGC", \
+    "-XX:MaxMetaspaceSize=128m", \
+    "-Xss512k", \
+    "-jar", "app.jar"]
